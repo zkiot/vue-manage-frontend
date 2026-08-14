@@ -5,5 +5,7 @@ export interface Menus {
     index: string;
     title: string;
     permiss?: string;
+    sortOrder?: number;
+    status?: boolean;
     children?: Menus[];
 }

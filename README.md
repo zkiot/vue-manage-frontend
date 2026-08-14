@@ -24,9 +24,9 @@
 
 ## 支持作者
 
-请作者喝杯咖啡吧！(微信号：linxin_20)
+请作者喝杯咖啡吧！(微信号：Mr_KZhu)
 
-![微信扫一扫](https://lin-xin.github.io/images/weixin.jpg)
+![微信扫一扫](https://raw.githubusercontent.com/zkiot/images/refs/heads/main/myapp/weixin.png)
 
 ## 前言
 

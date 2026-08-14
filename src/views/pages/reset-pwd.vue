@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { resetPasswordByEmail } from '@/api';
 
 const param = ref({
     email: '',
@@ -41,15 +42,14 @@ const rules: FormRules = {
     ],
 };
 const register = ref<FormInstance>();
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    formEl.validate((valid: boolean) => {
-        if (valid) {
-            ElMessage.success('邮件已发送，请注意查收');
-        } else {
-            return false;
-        }
-    });
+    const valid = await formEl.validate().catch(() => false);
+    if (!valid) {
+        return;
+    }
+    const res = await resetPasswordByEmail(param.value);
+    ElMessage.success(res.message || '邮件已发送，请注意查收');
 };
 </script>
 

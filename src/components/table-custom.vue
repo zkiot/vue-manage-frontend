@@ -36,7 +36,7 @@
             </div>
         </div>
         <el-table class="mgb20" :style="{ width: '100%' }" border :data="tableData" :row-key="rowKey"
-            @selection-change="handleSelectionChange" table-layout="auto">
+            :expand-row-keys="expandRowKeys" :row-class-name="rowClassName" @selection-change="handleSelectionChange" table-layout="auto">
             <template v-for="item in columns" :key="item.prop">
                 <el-table-column v-if="item.visible" :prop="item.prop" :label="item.label" :width="item.width"
                     :type="item.type" :align="item.align || 'center'">
@@ -91,6 +91,14 @@ const props = defineProps({
     rowKey: {
         type: String,
         default: 'id'
+    },
+    expandRowKeys: {
+        type: Array as PropType<string[]>,
+        default: () => []
+    },
+    rowClassName: {
+        type: Function,
+        default: undefined
     },
     hasToolbar: {
         type: Boolean,
@@ -148,6 +156,8 @@ let {
     tableData,
     columns,
     rowKey,
+    expandRowKeys,
+    rowClassName,
     hasToolbar,
     hasPagination,
     total,

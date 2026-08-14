@@ -4,7 +4,8 @@
 			<el-col :span="options.span" v-for="item in options.list">
 				<el-form-item :label="item.label" :prop="item.prop">
 					<!-- 文本框、数字框、下拉框、日期框、开关、上传 -->
-					<el-input v-if="item.type === 'input'" v-model="form[item.prop]" :disabled="item.disabled"
+                    <slot :name="item.prop" :form="form" :item="item" v-if="$slots[item.prop]"></slot>
+                    <el-input v-else-if="item.type === 'input'" v-model="form[item.prop]" :disabled="item.disabled"
 						:placeholder="item.placeholder" clearable></el-input>
 					<el-input-number v-else-if="item.type === 'number'" v-model="form[item.prop]"
 						:disabled="item.disabled" controls-position="right"></el-input-number>
@@ -24,9 +25,9 @@
 							<Plus />
 						</el-icon>
 					</el-upload>
-					<slot :name="item.prop" v-else>
-
-					</slot>
+					<template v-else>
+						<slot :name="item.prop" :form="form" :item="item"></slot>
+					</template>
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -62,7 +63,7 @@ const { options, formData, edit, update } = defineProps({
 });
 
 
-const form = ref({ ...(edit ? formData : {}) });
+const form = ref({ ...(formData || {}) });
 
 const rules: FormRules = options.list.map(item => {
 	if (item.required) {

@@ -3,6 +3,7 @@ import { usePermissStore } from '../store/permiss';
 import Home from '../views/home.vue';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import { storageKeys } from '@/utils';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -145,7 +146,6 @@ const routes: RouteRecordRaw[] = [
                 name: 'theme',
                 meta: {
                     title: '主题设置',
-                    permiss: '7',
                 },
                 component: () => import(/* webpackChunkName: "theme" */ '../views/pages/theme.vue'),
             },
@@ -273,12 +273,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    const role = localStorage.getItem('vuems_name');
+    const token = localStorage.getItem(storageKeys.token);
+    const roleKey = localStorage.getItem(storageKeys.roleKey);
     const permiss = usePermissStore();
 
-    if (!role && to.meta.noAuth !== true) {
+    if (!token && to.meta.noAuth !== true) {
         next('/login');
-    } else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {
+    }  else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {
         // 如果没有权限，则进入403
         next('/403');
     } else {

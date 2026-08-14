@@ -77,18 +77,30 @@ let columns = ref([
 const page = reactive({
 	index: 1,
 	size: 10,
-	total: 200,
+	total: 0,
 })
+const sourceData = ref<TableItem[]>([]);
 const tableData = ref<TableItem[]>([]);
+
+const applyTableData = () => {
+	const filtered = sourceData.value.filter((item) => {
+		return !query.name || item.name.includes(query.name);
+	});
+	page.total = filtered.length;
+	const start = (page.index - 1) * page.size;
+	tableData.value = filtered.slice(start, start + page.size);
+};
+
 const getData = async () => {
 	const res = await fetchData()
-	tableData.value = res.data.list;
+	sourceData.value = res.list;
+	applyTableData();
 };
 getData();
 
 const changePage = (val: number) => {
 	page.index = val;
-	getData();
+	applyTableData();
 };
 
 // 新增/编辑弹窗相关

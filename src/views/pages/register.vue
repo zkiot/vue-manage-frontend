@@ -52,6 +52,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { Register } from '@/types/user';
+import { register as registerApi } from '@/api';
 
 const router = useRouter();
 const param = reactive<Register>({
@@ -69,19 +70,21 @@ const rules: FormRules = {
         },
     ],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-    email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+    email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+        { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' },
+    ],
 };
 const register = ref<FormInstance>();
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    formEl.validate((valid: boolean) => {
-        if (valid) {
-            ElMessage.success('注册成功，请登录');
-            router.push('/login');
-        } else {
-            return false;
-        }
-    });
+    const valid = await formEl.validate().catch(() => false);
+    if (!valid) {
+        return;
+    }
+    await registerApi({ ...param });
+    ElMessage.success('注册成功，请登录');
+    router.push('/login');
 };
 </script>
 

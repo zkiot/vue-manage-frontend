@@ -34,7 +34,7 @@
                     <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
                 </div>
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips">Tips : 默认账号为 admin / 123456，或 user / 123456。</p>
                 <p class="login-text">
                     没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
                 </p>
@@ -50,6 +50,8 @@ import { usePermissStore } from '@/store/permiss';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
+import { fetchMenuData, fetchRoleData, login as loginApi } from '@/api';
+import { saveAuthState } from '@/utils';
 
 interface LoginInfo {
     username: string;
@@ -78,25 +80,31 @@ const rules: FormRules = {
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    formEl.validate((valid: boolean) => {
-        if (valid) {
-            ElMessage.success('登录成功');
-            localStorage.setItem('vuems_name', param.username);
-            const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
-            permiss.handleSet(keys);
-            router.push('/');
-            if (checked.value) {
-                localStorage.setItem('login-param', JSON.stringify(param));
-            } else {
-                localStorage.removeItem('login-param');
-            }
-        } else {
-            ElMessage.error('登录失败');
-            return false;
-        }
-    });
+    const valid = await formEl.validate().catch(() => false);
+    if (!valid) {
+        return;
+    }
+    const loginResult = await loginApi({ ...param });
+    const roleResult = await fetchRoleData();
+    const currentRole = roleResult.list.find((item) => item.key === loginResult.roleKey);
+    let permissions = currentRole?.permiss || [];
+    if (!permissions.length && loginResult.roleKey === 'admin') {
+        const menuResult = await fetchMenuData();
+        permissions = menuResult.list
+            .filter((item) => item.status !== false)
+            .map((item) => String(item.id));
+    }
+    saveAuthState(loginResult.token, loginResult.username, loginResult.roleKey, permissions);
+    permiss.handleSet(permissions);
+    ElMessage.success('登录成功');
+    router.push('/');
+    if (checked.value) {
+        localStorage.setItem('login-param', JSON.stringify(param));
+    } else {
+        localStorage.removeItem('login-param');
+    }
 };
 
 const tabs = useTabsStore();
