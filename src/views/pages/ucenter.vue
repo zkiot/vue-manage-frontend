@@ -9,9 +9,9 @@
                 <div class="user-info">
                     <div class="info-name">{{ name }}</div>
                     <div class="info-desc">
-                        <span>@lin-xin</span>
+                        <span>@zkiot</span>
                         <el-divider direction="vertical" />
-                        <el-link href="https://lin-xin.gitee.io" target="_blank">lin-xin.gitee.io</el-link>
+                        <el-link href="https://github.com/zkiot/vue-manage-frontend" target="_blank">github.com</el-link>
                     </div>
                     <div class="info-desc">FE Developer</div>
                     <div class="info-icon">

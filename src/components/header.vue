@@ -47,10 +47,10 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
+                            <a href="https://github.com/zkiot/vue-manage-frontend" target="_blank">
                                 <el-dropdown-item>项目仓库</el-dropdown-item>
                             </a>
-                            <a href="https://lin-xin.gitee.io/example/vuems-doc/" target="_blank">
+                            <a href="https://github.com/zkiot/vue-manage-frontend" target="_blank">
                                 <el-dropdown-item>官方文档</el-dropdown-item>
                             </a>
                             <el-dropdown-item command="user">个人中心</el-dropdown-item>

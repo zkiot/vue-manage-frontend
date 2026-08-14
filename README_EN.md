@@ -46,7 +46,7 @@ The scheme as a set of multi-function background frame templates, suitable for m
 
 ## Installation steps
 
-    git clone https://github.com/lin-xin/vue-manage-system.git		// Clone templates
+    git clone https://github.com/zkiot/vue-manage-frontend.git		// Clone templates
     cd vue-manage-system											// Enter template directory
     npm install													// Installation dependency
 
