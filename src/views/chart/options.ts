@@ -240,6 +240,12 @@ export const dashOpt1 = {
         containLabel: true,
     },
     color: ['#009688', '#f44336'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+        },
+    },
     series: [
         {
             type: 'line',
@@ -271,6 +277,10 @@ export const dashOpt2 = {
         bottom: '1%',
         left: 'center',
     },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)',
+    },
     color: ['#3f51b5', '#009688', '#f44336', '#00bcd4', '#1ABC9C'],
     series: [
         {
@@ -289,7 +299,7 @@ export const dashOpt2 = {
                 { value: 484, name: '家电' },
                 { value: 300, name: '运动' },
             ],
-        },
+        }
     ],
 };
 

@@ -43,7 +43,7 @@ export const mapMenuItem = (item: {
     permissionCode?: string;
     sortOrder?: number;
     status?: boolean;
-})=> {
+}): Menus => {
     return {
         id: item.id,
         pid: item.parentId || undefined,
